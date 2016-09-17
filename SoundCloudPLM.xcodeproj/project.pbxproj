@@ -13,6 +13,10 @@
 		D506DD6C1D8DAB0F000B0E61 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D506DD6A1D8DAB0F000B0E61 /* Main.storyboard */; };
 		D506DD6E1D8DAB0F000B0E61 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D506DD6D1D8DAB0F000B0E61 /* Assets.xcassets */; };
 		D506DD711D8DAB0F000B0E61 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D506DD6F1D8DAB0F000B0E61 /* LaunchScreen.storyboard */; };
+		D55528E71D8DC455006A7B59 /* SCNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = D55528E61D8DC455006A7B59 /* SCNetworking.m */; };
+		D55528EA1D8DCAAA006A7B59 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D55528E91D8DCAAA006A7B59 /* LoginViewController.m */; };
+		D55528ED1D8DCD2E006A7B59 /* OAuthState.m in Sources */ = {isa = PBXBuildFile; fileRef = D55528EC1D8DCD2E006A7B59 /* OAuthState.m */; };
+		D55528F01D8DCD42006A7B59 /* AuthResult.m in Sources */ = {isa = PBXBuildFile; fileRef = D55528EF1D8DCD42006A7B59 /* AuthResult.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +30,14 @@
 		D506DD6D1D8DAB0F000B0E61 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D506DD701D8DAB0F000B0E61 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D506DD721D8DAB0F000B0E61 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D55528E51D8DC455006A7B59 /* SCNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCNetworking.h; sourceTree = "<group>"; };
+		D55528E61D8DC455006A7B59 /* SCNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCNetworking.m; sourceTree = "<group>"; };
+		D55528E81D8DCAAA006A7B59 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
+		D55528E91D8DCAAA006A7B59 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
+		D55528EB1D8DCD2E006A7B59 /* OAuthState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAuthState.h; sourceTree = "<group>"; };
+		D55528EC1D8DCD2E006A7B59 /* OAuthState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAuthState.m; sourceTree = "<group>"; };
+		D55528EE1D8DCD42006A7B59 /* AuthResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AuthResult.h; sourceTree = "<group>"; };
+		D55528EF1D8DCD42006A7B59 /* AuthResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AuthResult.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,14 +70,13 @@
 		D506DD601D8DAB0F000B0E61 /* SoundCloudPLM */ = {
 			isa = PBXGroup;
 			children = (
-				D506DD641D8DAB0F000B0E61 /* AppDelegate.h */,
-				D506DD651D8DAB0F000B0E61 /* AppDelegate.m */,
+				D506DD791D8DAC47000B0E61 /* Model */,
+				D506DD781D8DAC3F000B0E61 /* View */,
 				D506DD671D8DAB0F000B0E61 /* ViewController.h */,
 				D506DD681D8DAB0F000B0E61 /* ViewController.m */,
+				D55528E81D8DCAAA006A7B59 /* LoginViewController.h */,
+				D55528E91D8DCAAA006A7B59 /* LoginViewController.m */,
 				D506DD6A1D8DAB0F000B0E61 /* Main.storyboard */,
-				D506DD6D1D8DAB0F000B0E61 /* Assets.xcassets */,
-				D506DD6F1D8DAB0F000B0E61 /* LaunchScreen.storyboard */,
-				D506DD721D8DAB0F000B0E61 /* Info.plist */,
 				D506DD611D8DAB0F000B0E61 /* Supporting Files */,
 			);
 			path = SoundCloudPLM;
@@ -74,9 +85,34 @@
 		D506DD611D8DAB0F000B0E61 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				D506DD6D1D8DAB0F000B0E61 /* Assets.xcassets */,
+				D506DD721D8DAB0F000B0E61 /* Info.plist */,
+				D506DD6F1D8DAB0F000B0E61 /* LaunchScreen.storyboard */,
+				D506DD641D8DAB0F000B0E61 /* AppDelegate.h */,
+				D506DD651D8DAB0F000B0E61 /* AppDelegate.m */,
 				D506DD621D8DAB0F000B0E61 /* main.m */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		D506DD781D8DAC3F000B0E61 /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		D506DD791D8DAC47000B0E61 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				D55528E51D8DC455006A7B59 /* SCNetworking.h */,
+				D55528E61D8DC455006A7B59 /* SCNetworking.m */,
+				D55528EB1D8DCD2E006A7B59 /* OAuthState.h */,
+				D55528EC1D8DCD2E006A7B59 /* OAuthState.m */,
+				D55528EE1D8DCD42006A7B59 /* AuthResult.h */,
+				D55528EF1D8DCD42006A7B59 /* AuthResult.m */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -110,6 +146,7 @@
 				TargetAttributes = {
 					D506DD5D1D8DAB0F000B0E61 = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = S6UEECG2X9;
 					};
 				};
 			};
@@ -152,6 +189,10 @@
 				D506DD691D8DAB0F000B0E61 /* ViewController.m in Sources */,
 				D506DD661D8DAB0F000B0E61 /* AppDelegate.m in Sources */,
 				D506DD631D8DAB0F000B0E61 /* main.m in Sources */,
+				D55528F01D8DCD42006A7B59 /* AuthResult.m in Sources */,
+				D55528ED1D8DCD2E006A7B59 /* OAuthState.m in Sources */,
+				D55528E71D8DC455006A7B59 /* SCNetworking.m in Sources */,
+				D55528EA1D8DCAAA006A7B59 /* LoginViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -263,6 +304,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = SoundCloudPLM/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = VasiliiMuravev.SoundCloudPLM;
@@ -274,6 +316,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = SoundCloudPLM/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = VasiliiMuravev.SoundCloudPLM;
@@ -300,6 +343,7 @@
 				D506DD771D8DAB0F000B0E61 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
