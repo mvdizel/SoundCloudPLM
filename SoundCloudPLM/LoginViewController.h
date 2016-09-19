@@ -15,5 +15,8 @@
 @end
 
 @interface LoginViewController : UIViewController
+
+@property (strong, nonatomic) SCNetworking *networkong;
 @property (weak, nonatomic) id<LoginViewControllerDelegate> delegate;
+
 @end

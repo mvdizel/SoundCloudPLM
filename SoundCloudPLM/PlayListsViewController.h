@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  PlayListsViewController.h
 //  SoundCloudPLM
 //
 //  Created by Vasilii Muravev on 17.09.16.
@@ -9,9 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "SCNetworking.h"
 
-@interface ViewController : UIViewController
-
+@interface PlayListsViewController : UICollectionViewController
 @property (strong, nonatomic) SCNetworking *networkong;
-
 @end
-

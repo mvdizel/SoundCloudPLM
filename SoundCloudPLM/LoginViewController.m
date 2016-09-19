@@ -9,14 +9,12 @@
 #import "LoginViewController.h"
 
 @interface LoginViewController () <UIWebViewDelegate>
-@property (strong, nonatomic) SCNetworking *networkong;
 @end
 
 @implementation LoginViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.networkong = [[SCNetworking alloc] init];
     // Do any additional setup after loading the view.
 }
 
@@ -56,6 +54,5 @@
     }
     return true;
 }
-
 
 @end

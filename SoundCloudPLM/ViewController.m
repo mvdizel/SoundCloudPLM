@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #import "LoginViewController.h"
+#import "PlayListsViewController.h"
 
 @interface ViewController () <LoginViewControllerDelegate>
 
@@ -18,6 +19,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    self.networkong = [[SCNetworking alloc] init];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -29,6 +31,12 @@
     if ([segue.identifier isEqualToString:@"LoginSegue"]) {
         LoginViewController *loginCont = segue.destinationViewController;
         loginCont.delegate = self;
+        loginCont.networkong = self.networkong;
+    }
+    if ([segue.identifier isEqualToString:@"PlayListsSegue"]) {
+        UINavigationController *navC = segue.destinationViewController;
+        PlayListsViewController *plCont = (PlayListsViewController *)[navC topViewController];
+        plCont.networkong = self.networkong;
     }
 }
 
@@ -36,6 +44,7 @@
 
 -(void)didSucceedWithResult:(AuthResult *)result {
     NSLog(@"Success");
+    [self performSegueWithIdentifier:@"PlayListsSegue" sender:self];
 }
 
 -(void)didFail {
