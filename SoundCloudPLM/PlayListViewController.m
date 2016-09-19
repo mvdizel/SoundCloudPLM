@@ -7,21 +7,18 @@
 //
 
 #import "PlayListViewController.h"
+#import "PlayListViewCell.h"
+#import "TrackDetailsViewController.h"
 
 @interface PlayListViewController ()
-
+@property (weak, nonatomic) IBOutlet UIImageView *playlistImage;
 @end
 
 @implementation PlayListViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    [self setup];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -29,27 +26,41 @@
     // Dispose of any resources that can be recreated.
 }
 
+-(void)setup
+{
+//    [self.networkong updateTracksForPL:self.playlist];
+    
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
+    dispatch_async(queue, ^{
+        UIImage *downloadedImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:self.playlist.image500]];
+        
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [self.playlistImage setImage:downloadedImage];
+        });
+    });
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-#warning Incomplete implementation, return the number of sections
-    return 0;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-#warning Incomplete implementation, return the number of rows
-    return 0;
+    return self.playlist.tracks.count;
 }
 
-/*
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
+    PlayListViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TrackCell" forIndexPath:indexPath];
     
-    // Configure the cell...
+    Track *tr = self.playlist.tracks[indexPath.row];
+    cell.titleLabel.text = tr.title;
+    cell.artistLabel.text = tr.artist;
+    cell.numberLabel.text = [NSString stringWithFormat:@"%ld",(long)(indexPath.row + 1)];
+    [cell updateImageWithUrl:tr.image];
     
     return cell;
 }
-*/
 
 /*
 // Override to support conditional editing of the table view.
@@ -85,14 +96,15 @@
 }
 */
 
-/*
 #pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    if ([segue.identifier isEqualToString:@"TracksDetailsSegue"]) {
+        TrackDetailsViewController *cont = segue.destinationViewController;
+        cont.networkong = self.networkong;
+        NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
+        cont.track = self.playlist.tracks[indexPath.row];
+    }
 }
-*/
 
 @end

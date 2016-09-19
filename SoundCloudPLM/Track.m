@@ -24,6 +24,14 @@
     _playId = [dict valueForKey:@"id"];
     _title = [NSString stringWithString:[dict valueForKey:@"title"]];
     _image = [self urlForJSONValue:[dict valueForKey:@"artwork_url"]];
+    if (_image) {
+        NSString *u500 = [_image.absoluteString stringByReplacingOccurrencesOfString:@"large.jpg"
+                                                                          withString:@"t500x500.jpg"];
+        _image500 = [NSURL URLWithString:u500];
+    } else {
+        _image500 = nil;
+    }
+    _artist = [NSString stringWithString:[[dict valueForKey:@"user"] valueForKey:@"username"]];
 }
 
 -(NSURL *)urlForJSONValue:(id)value

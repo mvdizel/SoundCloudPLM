@@ -26,5 +26,6 @@
 -(void)getPlaylists;
 -(BOOL)isOAuthResponse:(NSURL *)url;
 -(void)createPlaylistNamed:(NSString *)name;
+-(void)updateTracksForPL:(Playlist *)pl;
 
 @end

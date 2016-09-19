@@ -25,6 +25,36 @@
 
 #pragma mark - Playlists API
 
+-(void)updateTracksForPL:(Playlist *)pl
+{
+    NSURLRequest *request = [self makePlaylistsRequestWithId:pl.playId];
+    NSURLSession *session = [NSURLSession sharedSession];
+    [[session dataTaskWithURL:request.URL
+            completionHandler:^(NSData *data,
+                                NSURLResponse *response,
+                                NSError *error) {
+                NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+                [pl parseWithDict:json];
+                [self.delegate dataUpdated];
+            }] resume];
+}
+
+-(NSURLRequest *)makePlaylistsRequestWithId:(NSNumber *)id
+{
+    NSString *urlStr = [NSString stringWithFormat:@"https://api.soundcloud.com/me/playlists/%@",id];
+    NSURL *url = [NSURL URLWithString:urlStr];
+    NSURLComponents *comp = [NSURLComponents componentsWithURL:url
+                                       resolvingAgainstBaseURL:YES];
+    
+    NSMutableArray *qi = [[NSMutableArray alloc] init];
+    [qi addObject:[NSURLQueryItem queryItemWithName:@"oauth_token" value:self.authResult.value]];
+    comp.queryItems = qi;
+    
+    NSURLRequest *request = [NSURLRequest requestWithURL:comp.URL];
+    
+    return request;
+}
+
 -(NSURLRequest *)makePlaylistsRequest
 {
     NSURL *url = [NSURL URLWithString:@"https://api.soundcloud.com/me/playlists"];

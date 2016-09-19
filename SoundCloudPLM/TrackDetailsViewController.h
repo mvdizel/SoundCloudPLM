@@ -1,15 +1,15 @@
 //
-//  PlayListViewController.h
+//  TrackDetailsViewController.h
 //  SoundCloudPLM
 //
-//  Created by Vasilii Muravev on 18.09.16.
+//  Created by Vasilii Muravev on 19.09.16.
 //  Copyright © 2016 Vasilii Muravev. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 #import "SCNetworking.h"
 
-@interface PlayListViewController : UITableViewController
+@interface TrackDetailsViewController : UIViewController
 @property (strong, nonatomic) SCNetworking *networkong;
-@property (strong, nonatomic) Playlist *playlist;
+@property (strong, nonatomic) Track *track;
 @end

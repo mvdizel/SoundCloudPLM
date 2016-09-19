@@ -8,6 +8,7 @@
 
 #import "PlayListsViewController.h"
 #import "PlayListsViewCell.h"
+#import "PlayListViewController.h"
 
 @interface PlayListsViewController () <SCNetworkingDelegate>
 
@@ -32,7 +33,10 @@ static NSString * const reuseIdentifier = @"CellPL";
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"TracksSegue"]) {
-        //
+        PlayListViewController *cont = segue.destinationViewController;
+        NSIndexPath *indexPath = [self.collectionView indexPathForCell:sender];
+        cont.playlist = self.networkong.playlists[indexPath.row];
+        cont.networkong = self.networkong;
     }
 }
 

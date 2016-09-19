@@ -12,5 +12,9 @@
 @property (weak, nonatomic) IBOutlet UIImageView *imageTrackView;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *numberLabel;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *spinner;
+@property (weak, nonatomic) IBOutlet UILabel *artistLabel;
+
+-(void)updateImageWithUrl:(NSURL *)url;
 
 @end

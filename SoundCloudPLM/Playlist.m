@@ -22,8 +22,6 @@
     return self;
 }
 
-#pragma mark - Private JSON parsing
-
 -(void)parseWithDict:(NSDictionary *)dict
 {
     _playId = [dict valueForKey:@"id"];
@@ -38,7 +36,16 @@
     if (!_image && _tracks.count != 0) {
         _image = [_tracks.firstObject valueForKey:@"image"];
     }
+    if (_image) {
+        NSString *u500 = [_image.absoluteString stringByReplacingOccurrencesOfString:@"large.jpg"
+                                                                          withString:@"t500x500.jpg"];
+        _image500 = [NSURL URLWithString:u500];
+    } else {
+        _image500 = nil;
+    }
 }
+
+#pragma mark - Private JSON parsing
 
 -(NSURL *)urlForJSONValue:(id)value
 {
