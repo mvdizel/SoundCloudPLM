@@ -29,6 +29,11 @@
     }
 }
 
+- (void) dismissKeyboard
+{
+    [self.searchBar resignFirstResponder];
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -62,13 +67,16 @@
 -(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
     [self.networkong searchTracksWithQuery:searchBar.text];
+    [self dismissKeyboard];
 }
 
 -(void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
 {
     [self.networkong clearSearchResults];
     [self.tableView reloadData];
+    [self dismissKeyboard];
 }
+
 -(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
     [self.networkong searchTracksWithQuery:searchText];

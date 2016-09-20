@@ -21,7 +21,6 @@ static NSString * const reuseIdentifier = @"CellPL";
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.networkong = [SCNetworking sharedInstance];
-    [self setup];
 }
 
 -(void)viewWillAppear:(BOOL)animated
