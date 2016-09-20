@@ -11,5 +11,5 @@
 
 @interface SearchTracksViewController : UITableViewController
 @property (strong, nonatomic) SCNetworking *networkong;
-@property (strong, nonatomic) Playlist *playlist;
+@property (weak, nonatomic) Playlist *playlist;
 @end

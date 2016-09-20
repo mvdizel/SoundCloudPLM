@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Playlist.h"
 
 @interface PlayListsViewCell : UICollectionViewCell
 
@@ -14,6 +15,6 @@
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *spinner;
 
--(void)updateImageWithUrl:(NSURL *)url;
+-(void)updateImageWithUrl:(NSURL *)url andPlaylist:(Playlist *)pl;
 
 @end

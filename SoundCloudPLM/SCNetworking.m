@@ -11,6 +11,7 @@
 @interface SCNetworking ()
 @property (strong, nonatomic) AuthResult* authResult;
 @property (strong, nonatomic, readwrite) NSMutableArray *playlists;
+@property (strong, nonatomic, readwrite) Playlist *tempPlaylist;
 @property (strong, nonatomic, readwrite) NSMutableArray *findedTracks;
 @end
 
@@ -74,9 +75,13 @@
     return request;
 }
 
--(NSURLRequest *)makeNewPlaylistsRequestNamed:(NSString *)name
+-(NSURLRequest *)makeSavePlaylistsRequest:(Playlist *)pl
 {
-    NSURL *url = [NSURL URLWithString:@"https://api.soundcloud.com/playlists.json"];
+    NSString *plURL = @"https://api.soundcloud.com/playlists";
+    if (pl.playId) {
+        plURL = [pl.uri absoluteString];//[NSString stringWithFormat:@"%@/%@", plURL, pl.playId];
+    }
+    NSURL *url = [NSURL URLWithString:plURL];
     NSURLComponents *comp = [NSURLComponents componentsWithURL:url
                                        resolvingAgainstBaseURL:YES];
 
@@ -88,11 +93,19 @@
     request.HTTPMethod = @"POST";
     
 //    NSDictionary *newPL = @{@"title":name,@"sharing":@"public",@"tracks":@[]};
-    NSDictionary *newPL = @{@"title":name,@"sharing":@"public"};//,@"tracks":@[]};
-    NSDictionary *gistDict = @{@"playlist":newPL};
+    NSMutableDictionary *newPL = [NSMutableDictionary new];
+    [newPL setValue:pl.title forKey:@"title"];
+    [newPL setValue:@"sharing" forKey:@"sharing"];
+    NSMutableArray *tracks = [NSMutableArray new];
+    for (Track *track in pl.tracks) {
+        [tracks addObject:@{@"id":[track.playId stringValue]}];
+    }
+    [newPL setValue:tracks forKey:@"tracks"];
+    
+    NSDictionary *jsonDict = @{@"playlist":newPL};
     
     NSError *jsonError;
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:gistDict
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:jsonDict
                                                        options:NSJSONWritingPrettyPrinted
                                                          error:&jsonError];
     
@@ -117,17 +130,22 @@
 
 -(void)createPlaylistNamed:(NSString *)name
 {
-    NSURLRequest *request = [self makeNewPlaylistsRequestNamed:name];
+    self.tempPlaylist = [[Playlist alloc] initTemporaryNamed:name];
+}
+
+-(void)savePlaylist:(Playlist *)pl
+{
+    NSURLRequest *request = [self makeSavePlaylistsRequest:pl];
     NSURLSession *session = [NSURLSession sharedSession];
     [[session dataTaskWithRequest:request
                 completionHandler:^(NSData *data,
                                     NSURLResponse *response,
                                     NSError *error) {
-                [self.delegate dataUpdated];
+                    [self.delegate dataUpdated];
 //                NSLog([NSString stringWithFormat:@"resp url %@", response.URL]);
-                NSLog([NSString stringWithFormat:@"resp %@", response]);
-                NSLog([NSString stringWithFormat:@"err %@", error]);
-            }] resume];
+//                    NSLog([NSString stringWithFormat:@"resp %@", response]);
+//                    NSLog([NSString stringWithFormat:@"err %@", error]);
+                }] resume];
 }
 
 -(void)updatePlaylistsFromJSON:(NSArray *)json
@@ -144,6 +162,7 @@
 -(void)clearSearchResults;
 {
     [_findedTracks removeAllObjects];
+    _searchText = @"";
     [self.delegate dataUpdated];
 }
 
@@ -165,6 +184,7 @@
 
 -(void)searchTracksWithQuery:(NSString *)query
 {
+    _searchText = query;
     NSURLRequest *request = [self makeSearchRequestWithQuery:query];
     NSURLSession *session = [NSURLSession sharedSession];
     [[session dataTaskWithURL:request.URL

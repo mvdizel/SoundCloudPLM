@@ -34,8 +34,8 @@
 
 -(void)setup
 {
-//    [self.networkong updateTracksForPL:self.playlist];
-    
+    self.tableView.allowsMultipleSelectionDuringEditing = NO;
+
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
     dispatch_async(queue, ^{
         UIImage *downloadedImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:self.playlist.image500]];
@@ -44,6 +44,11 @@
             [self.playlistImage setImage:downloadedImage];
         });
     });
+}
+
+- (IBAction)savePlaylistTapped:(UIBarButtonItem *)sender {
+    [self.networkong savePlaylist:self.playlist];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - Table view data source
@@ -62,10 +67,20 @@
     Track *tr = self.playlist.tracks[indexPath.row];
     cell.titleLabel.text = tr.title;
     cell.artistLabel.text = tr.artist;
-    cell.numberLabel.text = [NSString stringWithFormat:@"%ld",(long)(indexPath.row + 1)];
-    [cell updateImageWithUrl:tr.image];
+    [cell updateImageWithUrl:tr.image andTrack:tr];
     
     return cell;
+}
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    return YES;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        [self.playlist delTrackAtIndex:(long)indexPath.row];
+        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    }
 }
 
 #pragma mark - Navigation

@@ -15,6 +15,7 @@
 @property (strong, nonatomic, readonly) NSString *artist;
 @property (strong, nonatomic, readonly) NSURL *image;
 @property (strong, nonatomic, readonly) NSURL *image500;
+@property (strong, nonatomic) NSData *downloadedImage;
 
 -(instancetype)initWithDict:(NSDictionary *)dict;
 

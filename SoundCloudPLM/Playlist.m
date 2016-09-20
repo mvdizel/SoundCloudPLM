@@ -22,11 +22,21 @@
     return self;
 }
 
+-(instancetype)initTemporaryNamed:(NSString *)name
+{
+    self = [super init];
+    _tracks = [[NSMutableArray alloc] init];
+    NSDictionary *dict = @{@"title":name};
+    [self parseWithDict:dict];
+    return self;
+}
+
 -(void)parseWithDict:(NSDictionary *)dict
 {
     _playId = [dict valueForKey:@"id"];
     _title = [NSString stringWithString:[dict valueForKey:@"title"]];
     _image = [self urlForJSONValue:[dict valueForKey:@"artwork_url"]];
+    _uri = [self urlForJSONValue:[dict valueForKey:@"uri"]];
     
     [_tracks removeAllObjects];
     for (NSDictionary *track in [dict valueForKey:@"tracks"]) {
@@ -48,6 +58,11 @@
 -(void)addTrack:(Track *)track
 {
     [_tracks addObject:track];
+}
+
+-(void)delTrackAtIndex:(long)index
+{
+    [_tracks removeObjectAtIndex:index];
 }
 
 #pragma mark - Private JSON parsing

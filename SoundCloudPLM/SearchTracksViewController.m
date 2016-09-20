@@ -17,7 +17,14 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
     self.networkong.delegate = self;
+    if (self.networkong.searchText && self.networkong.searchText.length > 0) {
+        self.searchBar.text = self.networkong.searchText;
+    }
 }
 
 #pragma mark - Table view data source
@@ -37,8 +44,7 @@
     Track *tr = self.networkong.findedTracks[indexPath.row];
     cell.titleLabel.text = tr.title;
     cell.artistLabel.text = tr.artist;
-    cell.numberLabel.text = [NSString stringWithFormat:@"%ld",(long)(indexPath.row + 1)];
-    [cell updateImageWithUrl:tr.image];
+    [cell updateImageWithUrl:tr.image andTrack:tr];
     
     return cell;
 }
@@ -60,6 +66,10 @@
 {
     [self.networkong clearSearchResults];
     [self.tableView reloadData];
+}
+-(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
+{
+    [self.networkong searchTracksWithQuery:searchText];
 }
 
 -(void)dataUpdated

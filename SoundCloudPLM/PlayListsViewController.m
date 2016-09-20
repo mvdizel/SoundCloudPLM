@@ -20,12 +20,12 @@ static NSString * const reuseIdentifier = @"CellPL";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self setup];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+-(void)viewWillAppear:(BOOL)animated
+{
+    self.networkong.delegate = self;
+    [self setup];
 }
 
 #pragma mark - Navigation
@@ -34,8 +34,12 @@ static NSString * const reuseIdentifier = @"CellPL";
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"TracksSegue"]) {
         PlayListViewController *cont = segue.destinationViewController;
-        NSIndexPath *indexPath = [self.collectionView indexPathForCell:sender];
-        cont.playlist = self.networkong.playlists[indexPath.row];
+        if ([sender isKindOfClass:[Playlist class]]) {
+            cont.playlist = sender;
+        } else {
+            NSIndexPath *indexPath = [self.collectionView indexPathForCell:sender];
+            cont.playlist = self.networkong.playlists[indexPath.row];
+        }
         cont.networkong = self.networkong;
     }
 }
@@ -73,7 +77,7 @@ static NSString * const reuseIdentifier = @"CellPL";
     Playlist *pl = self.networkong.playlists[indexPath.row];
     
     cell.titleLabel.text = pl.title;
-    [cell updateImageWithUrl:pl.image];
+    [cell updateImageWithUrl:pl.image andPlaylist:pl];
     
     return cell;
 }
@@ -94,7 +98,8 @@ static NSString * const reuseIdentifier = @"CellPL";
     {
         NSString *name = alert.textFields[0].text;
         [self.networkong createPlaylistNamed:name];
-        [self updateData];
+        [self performSegueWithIdentifier:@"TracksSegue" sender:self.networkong.tempPlaylist];
+//        [self updateData];
     }];
     
     UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel"
@@ -106,37 +111,6 @@ static NSString * const reuseIdentifier = @"CellPL";
     
     [self presentViewController:alert animated:YES completion:nil];
 }
-
-#pragma mark <UICollectionViewDelegate>
-
-/*
-// Uncomment this method to specify if the specified item should be highlighted during tracking
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
-	return YES;
-}
-*/
-
-/*
-// Uncomment this method to specify if the specified item should be selected
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    return YES;
-}
-*/
-
-/*
-// Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath {
-	return NO;
-}
-
-- (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
-	return NO;
-}
-
-- (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
-	
-}
-*/
 
 #pragma mark - SC Networking delegate
 

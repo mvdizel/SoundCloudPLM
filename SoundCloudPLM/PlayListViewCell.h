@@ -7,14 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Track.h"
 
 @interface PlayListViewCell : UITableViewCell
-@property (weak, nonatomic) IBOutlet UIImageView *imageTrackView;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
-@property (weak, nonatomic) IBOutlet UILabel *numberLabel;
-@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *spinner;
 @property (weak, nonatomic) IBOutlet UILabel *artistLabel;
 
--(void)updateImageWithUrl:(NSURL *)url;
+-(void)updateImageWithUrl:(NSURL *)url andTrack:(Track *)track;
 
 @end
