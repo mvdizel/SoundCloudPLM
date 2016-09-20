@@ -10,6 +10,5 @@
 #import "SCNetworking.h"
 
 @interface TrackDetailsViewController : UIViewController
-@property (strong, nonatomic) SCNetworking *networkong;
 @property (strong, nonatomic) Track *track;
 @end

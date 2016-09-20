@@ -10,6 +10,5 @@
 #import "SCNetworking.h"
 
 @interface SearchTracksViewController : UITableViewController
-@property (strong, nonatomic) SCNetworking *networkong;
 @property (weak, nonatomic) Playlist *playlist;
 @end

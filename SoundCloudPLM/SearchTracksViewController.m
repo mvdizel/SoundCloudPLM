@@ -11,12 +11,14 @@
 
 @interface SearchTracksViewController () <UITableViewDelegate, UISearchBarDelegate, SCNetworkingDelegate>
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
+@property (strong, nonatomic) SCNetworking *networkong;
 @end
 
 @implementation SearchTracksViewController 
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.networkong = [SCNetworking sharedInstance];
 }
 
 -(void)viewWillAppear:(BOOL)animated

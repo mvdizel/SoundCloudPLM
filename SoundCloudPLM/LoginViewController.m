@@ -9,18 +9,14 @@
 #import "LoginViewController.h"
 
 @interface LoginViewController () <UIWebViewDelegate>
+@property (strong, nonatomic) SCNetworking *networkong;
 @end
 
 @implementation LoginViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    self.networkong = [SCNetworking sharedInstance];
 }
 
 -(void)viewWillAppear:(BOOL)animated

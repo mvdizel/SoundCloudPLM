@@ -11,14 +11,14 @@
 #import "PlayListsViewController.h"
 
 @interface ViewController () <LoginViewControllerDelegate>
-
+@property (strong, nonatomic) SCNetworking *networkong;
 @end
 
 @implementation ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.networkong = [[SCNetworking alloc] init];
+    self.networkong = [SCNetworking sharedInstance];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -30,12 +30,6 @@
     if ([segue.identifier isEqualToString:@"LoginSegue"]) {
         LoginViewController *loginCont = segue.destinationViewController;
         loginCont.delegate = self;
-        loginCont.networkong = self.networkong;
-    }
-    if ([segue.identifier isEqualToString:@"PlayListsSegue"]) {
-        UINavigationController *navC = segue.destinationViewController;
-        PlayListsViewController *plCont = (PlayListsViewController *)[navC topViewController];
-        plCont.networkong = self.networkong;
     }
 }
 

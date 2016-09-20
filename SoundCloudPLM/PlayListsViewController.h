@@ -10,5 +10,4 @@
 #import "SCNetworking.h"
 
 @interface PlayListsViewController : UICollectionViewController
-@property (strong, nonatomic) SCNetworking *networkong;
 @end

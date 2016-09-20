@@ -10,6 +10,5 @@
 #import "SCNetworking.h"
 
 @interface PlayListViewController : UITableViewController
-@property (strong, nonatomic) SCNetworking *networkong;
 @property (strong, nonatomic) Playlist *playlist;
 @end

@@ -13,18 +13,15 @@
 
 @interface PlayListViewController ()
 @property (weak, nonatomic) IBOutlet UIImageView *playlistImage;
+@property (strong, nonatomic) SCNetworking *networkong;
 @end
 
 @implementation PlayListViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.networkong = [SCNetworking sharedInstance];
     [self setup];
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -88,13 +85,11 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"TracksDetailsSegue"]) {
         TrackDetailsViewController *cont = segue.destinationViewController;
-        cont.networkong = self.networkong;
         NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
         cont.track = self.playlist.tracks[indexPath.row];
     }
     if ([segue.identifier isEqualToString:@"SearchSegue"]) {
         SearchTracksViewController *cont = segue.destinationViewController;
-        cont.networkong = self.networkong;
         cont.playlist = self.playlist;
     }
 }

@@ -11,7 +11,7 @@
 #import "PlayListViewController.h"
 
 @interface PlayListsViewController () <SCNetworkingDelegate>
-
+@property (strong, nonatomic) SCNetworking *networkong;
 @end
 
 @implementation PlayListsViewController
@@ -20,12 +20,21 @@ static NSString * const reuseIdentifier = @"CellPL";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.networkong = [SCNetworking sharedInstance];
+    [self setup];
 }
 
 -(void)viewWillAppear:(BOOL)animated
 {
     self.networkong.delegate = self;
     [self setup];
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    CGFloat width = [UIScreen mainScreen].bounds.size.width / 2.f - 20.f;
+    CGSize size = CGSizeMake(width, width * 1.2f);
+    return size;
 }
 
 #pragma mark - Navigation
@@ -40,7 +49,6 @@ static NSString * const reuseIdentifier = @"CellPL";
             NSIndexPath *indexPath = [self.collectionView indexPathForCell:sender];
             cont.playlist = self.networkong.playlists[indexPath.row];
         }
-        cont.networkong = self.networkong;
     }
 }
 
@@ -85,7 +93,7 @@ static NSString * const reuseIdentifier = @"CellPL";
 - (IBAction)addNewPLTapped:(UIBarButtonItem *)sender {
     
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Creating new playlist"
-                                                                   message:@"It may take some time..."
+                                                                   message:@"You will need to to add some tracks to save playlist"
                                                             preferredStyle:UIAlertControllerStyleAlert];
     
     [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
@@ -99,7 +107,6 @@ static NSString * const reuseIdentifier = @"CellPL";
         NSString *name = alert.textFields[0].text;
         [self.networkong createPlaylistNamed:name];
         [self performSegueWithIdentifier:@"TracksSegue" sender:self.networkong.tempPlaylist];
-//        [self updateData];
     }];
     
     UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel"

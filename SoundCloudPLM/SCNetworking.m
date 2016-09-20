@@ -17,6 +17,16 @@
 
 @implementation SCNetworking
 
++ (instancetype)sharedInstance
+{
+    static SCNetworking *_sharedInstance = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _sharedInstance = [[SCNetworking alloc] init];
+    });
+    return _sharedInstance;
+}
+
 -(instancetype)init
 {
     self = [super init];
@@ -79,7 +89,7 @@
 {
     NSString *plURL = @"https://api.soundcloud.com/playlists";
     if (pl.playId) {
-        plURL = [pl.uri absoluteString];//[NSString stringWithFormat:@"%@/%@", plURL, pl.playId];
+        plURL = [pl.uri absoluteString];
     }
     NSURL *url = [NSURL URLWithString:plURL];
     NSURLComponents *comp = [NSURLComponents componentsWithURL:url
@@ -92,7 +102,6 @@
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:comp.URL];
     request.HTTPMethod = @"POST";
     
-//    NSDictionary *newPL = @{@"title":name,@"sharing":@"public",@"tracks":@[]};
     NSMutableDictionary *newPL = [NSMutableDictionary new];
     [newPL setValue:pl.title forKey:@"title"];
     [newPL setValue:@"sharing" forKey:@"sharing"];
@@ -142,9 +151,6 @@
                                     NSURLResponse *response,
                                     NSError *error) {
                     [self.delegate dataUpdated];
-//                NSLog([NSString stringWithFormat:@"resp url %@", response.URL]);
-//                    NSLog([NSString stringWithFormat:@"resp %@", response]);
-//                    NSLog([NSString stringWithFormat:@"err %@", error]);
                 }] resume];
 }
 

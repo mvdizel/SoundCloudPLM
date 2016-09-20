@@ -24,6 +24,8 @@
 @property (strong, nonatomic, readonly) NSString *searchText;
 @property (weak, nonatomic) id<SCNetworkingDelegate> delegate;
 
++(instancetype)sharedInstance;
+
 -(NSURLRequest *)makeAuthRequest;
 -(AuthResult *)resultFromAuthResponse:(NSURL *)url;
 -(void)getPlaylists;

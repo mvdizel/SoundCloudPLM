@@ -8,6 +8,10 @@
 
 #import "PlayListsViewCell.h"
 
+@interface PlayListsViewCell ()
+//@property (strong, nonatomic) NSURL *currentURL;
+@end
+
 @implementation PlayListsViewCell
 
 -(void)updateImageWithUrl:(NSURL *)url andPlaylist:(Track *)pl
