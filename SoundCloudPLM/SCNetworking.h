@@ -19,6 +19,7 @@
 
 @property (strong, nonatomic, readonly) OAuthState *state;
 @property (strong, nonatomic, readonly) NSArray *playlists;
+@property (strong, nonatomic, readonly) NSArray *findedTracks;
 @property (weak, nonatomic) id<SCNetworkingDelegate> delegate;
 
 -(NSURLRequest *)makeAuthRequest;
@@ -27,5 +28,7 @@
 -(BOOL)isOAuthResponse:(NSURL *)url;
 -(void)createPlaylistNamed:(NSString *)name;
 -(void)updateTracksForPL:(Playlist *)pl;
+-(void)searchTracksWithQuery:(NSString *)query;
+-(void)clearSearchResults;
 
 @end

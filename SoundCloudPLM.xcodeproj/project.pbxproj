@@ -22,6 +22,7 @@
 		D59D781C1D8EE27100C1E3BC /* Track.m in Sources */ = {isa = PBXBuildFile; fileRef = D59D781B1D8EE27100C1E3BC /* Track.m */; };
 		D59D781F1D8EF39F00C1E3BC /* PlayListsViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D59D781E1D8EF39F00C1E3BC /* PlayListsViewCell.m */; };
 		D59FC3A11D90748E00D827D9 /* TrackDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D59FC3A01D90748E00D827D9 /* TrackDetailsViewController.m */; };
+		D59FC3A51D909EB300D827D9 /* SearchTracksViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D59FC3A41D909EB300D827D9 /* SearchTracksViewController.m */; };
 		D5F56EBA1D8F6064003DF0B3 /* PlayListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5F56EB91D8F6064003DF0B3 /* PlayListViewController.m */; };
 		D5F56EBD1D8F6164003DF0B3 /* PlayListViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D5F56EBC1D8F6164003DF0B3 /* PlayListViewCell.m */; };
 /* End PBXBuildFile section */
@@ -55,6 +56,8 @@
 		D59D781E1D8EF39F00C1E3BC /* PlayListsViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayListsViewCell.m; sourceTree = "<group>"; };
 		D59FC39F1D90748E00D827D9 /* TrackDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrackDetailsViewController.h; sourceTree = "<group>"; };
 		D59FC3A01D90748E00D827D9 /* TrackDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TrackDetailsViewController.m; sourceTree = "<group>"; };
+		D59FC3A31D909EB300D827D9 /* SearchTracksViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchTracksViewController.h; sourceTree = "<group>"; };
+		D59FC3A41D909EB300D827D9 /* SearchTracksViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchTracksViewController.m; sourceTree = "<group>"; };
 		D5F56EB81D8F6064003DF0B3 /* PlayListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayListViewController.h; sourceTree = "<group>"; };
 		D5F56EB91D8F6064003DF0B3 /* PlayListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayListViewController.m; sourceTree = "<group>"; };
 		D5F56EBB1D8F6164003DF0B3 /* PlayListViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayListViewCell.h; sourceTree = "<group>"; };
@@ -154,6 +157,8 @@
 				D5F56EB91D8F6064003DF0B3 /* PlayListViewController.m */,
 				D59FC39F1D90748E00D827D9 /* TrackDetailsViewController.h */,
 				D59FC3A01D90748E00D827D9 /* TrackDetailsViewController.m */,
+				D59FC3A31D909EB300D827D9 /* SearchTracksViewController.h */,
+				D59FC3A41D909EB300D827D9 /* SearchTracksViewController.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -239,6 +244,7 @@
 				D59FC3A11D90748E00D827D9 /* TrackDetailsViewController.m in Sources */,
 				D506DD661D8DAB0F000B0E61 /* AppDelegate.m in Sources */,
 				D506DD631D8DAB0F000B0E61 /* main.m in Sources */,
+				D59FC3A51D909EB300D827D9 /* SearchTracksViewController.m in Sources */,
 				D55528F01D8DCD42006A7B59 /* AuthResult.m in Sources */,
 				D55528ED1D8DCD2E006A7B59 /* OAuthState.m in Sources */,
 				D55528E71D8DC455006A7B59 /* SCNetworking.m in Sources */,

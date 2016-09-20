@@ -11,6 +11,7 @@
 @interface SCNetworking ()
 @property (strong, nonatomic) AuthResult* authResult;
 @property (strong, nonatomic, readwrite) NSMutableArray *playlists;
+@property (strong, nonatomic, readwrite) NSMutableArray *findedTracks;
 @end
 
 @implementation SCNetworking
@@ -18,8 +19,11 @@
 -(instancetype)init
 {
     self = [super init];
-    _state = [[OAuthState alloc] init];
-    _playlists = [[NSMutableArray alloc] init];
+    if (self) {
+        _state = [[OAuthState alloc] init];
+        _playlists = [[NSMutableArray alloc] init];
+        _findedTracks = [[NSMutableArray alloc] init];
+    }
     return self;
 }
 
@@ -133,6 +137,47 @@
         Playlist *pl = [[Playlist alloc] initWithDict:json[i]];
         [_playlists addObject:pl];
     }
+}
+
+#pragma mark - Tracks
+
+-(void)clearSearchResults;
+{
+    [_findedTracks removeAllObjects];
+    [self.delegate dataUpdated];
+}
+
+-(NSURLRequest *)makeSearchRequestWithQuery:(NSString *)query
+{
+    NSURL *url = [NSURL URLWithString:@"https://api.soundcloud.com/tracks"];
+    NSURLComponents *comp = [NSURLComponents componentsWithURL:url
+                                       resolvingAgainstBaseURL:YES];
+    
+    NSMutableArray *qi = [[NSMutableArray alloc] init];
+    [qi addObject:[NSURLQueryItem queryItemWithName:@"oauth_token" value:self.authResult.value]];
+    [qi addObject:[NSURLQueryItem queryItemWithName:@"q" value:query]];
+    comp.queryItems = qi;
+    
+    NSURLRequest *request = [NSURLRequest requestWithURL:comp.URL];
+    
+    return request;
+}
+
+-(void)searchTracksWithQuery:(NSString *)query
+{
+    NSURLRequest *request = [self makeSearchRequestWithQuery:query];
+    NSURLSession *session = [NSURLSession sharedSession];
+    [[session dataTaskWithURL:request.URL
+            completionHandler:^(NSData *data,
+                                NSURLResponse *response,
+                                NSError *error) {
+                NSMutableArray *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+                [_findedTracks removeAllObjects];
+                for (NSDictionary *dict in json) {
+                    [_findedTracks addObject:[[Track alloc] initWithDict:dict]];
+                }
+                [self.delegate dataUpdated];
+            }] resume];
 }
 
 #pragma mark - Authentication

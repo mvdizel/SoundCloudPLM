@@ -45,6 +45,11 @@
     }
 }
 
+-(void)addTrack:(Track *)track
+{
+    [_tracks addObject:track];
+}
+
 #pragma mark - Private JSON parsing
 
 -(NSURL *)urlForJSONValue:(id)value

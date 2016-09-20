@@ -19,5 +19,6 @@
 
 -(instancetype)initWithDict:(NSDictionary *)dict;
 -(void)parseWithDict:(NSDictionary *)dict;
+-(void)addTrack:(Track *)track;
 
 @end
