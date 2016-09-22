@@ -11,7 +11,7 @@
 #import "TrackDetailsViewController.h"
 #import "SearchTracksViewController.h"
 
-@interface PlayListViewController ()
+@interface PlayListViewController () <SCNetworkingDelegate>
 @property (weak, nonatomic) IBOutlet UIImageView *playlistImage;
 @property (strong, nonatomic) SCNetworking *networkong;
 @end
@@ -21,11 +21,14 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.networkong = [SCNetworking sharedInstance];
+    self.networkong.delegate = self;
     [self setup];
 }
 
 -(void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
+    self.networkong.delegate = self;
     [self.tableView reloadData];
 }
 
@@ -44,8 +47,29 @@
 }
 
 - (IBAction)savePlaylistTapped:(UIBarButtonItem *)sender {
+    [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
     [self.networkong savePlaylist:self.playlist];
-    [self.navigationController popViewControllerAnimated:YES];
+}
+
+-(void)dataUpdateSuccess:(BOOL)success
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[UIApplication sharedApplication] endIgnoringInteractionEvents];
+        if (success) {
+            [self.navigationController popViewControllerAnimated:YES];
+        } else {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Couldn't save playlist"
+                                                                           message:@"Try again later"
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            
+            UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK"
+                                                         style:UIAlertActionStyleDefault
+                                                       handler:nil];
+            
+            [alert addAction:ok];
+            [self presentViewController:alert animated:YES completion:nil];
+        }
+    });
 }
 
 #pragma mark - Table view data source

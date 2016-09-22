@@ -12,7 +12,7 @@
 #import "Playlist.h"
 
 @protocol SCNetworkingDelegate <NSObject>
--(void)dataUpdated;
+-(void)dataUpdateSuccess:(BOOL)success;
 @end
 
 @interface SCNetworking : NSObject
