@@ -23,7 +23,7 @@
 		D59D781F1D8EF39F00C1E3BC /* PlayListsViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D59D781E1D8EF39F00C1E3BC /* PlayListsViewCell.m */; };
 		D59FC3A11D90748E00D827D9 /* TrackDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D59FC3A01D90748E00D827D9 /* TrackDetailsViewController.m */; };
 		D59FC3A51D909EB300D827D9 /* SearchTracksViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D59FC3A41D909EB300D827D9 /* SearchTracksViewController.m */; };
-		D5E5B5AB1D94624E00809B71 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = D5E5B5AA1D94624E00809B71 /* README.md */; };
+		D5E5B5AD1D9462C000809B71 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = D5E5B5AC1D9462C000809B71 /* README.md */; };
 		D5F56EBA1D8F6064003DF0B3 /* PlayListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5F56EB91D8F6064003DF0B3 /* PlayListViewController.m */; };
 		D5F56EBD1D8F6164003DF0B3 /* PlayListViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D5F56EBC1D8F6164003DF0B3 /* PlayListViewCell.m */; };
 /* End PBXBuildFile section */
@@ -59,7 +59,7 @@
 		D59FC3A01D90748E00D827D9 /* TrackDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TrackDetailsViewController.m; sourceTree = "<group>"; };
 		D59FC3A31D909EB300D827D9 /* SearchTracksViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchTracksViewController.h; sourceTree = "<group>"; };
 		D59FC3A41D909EB300D827D9 /* SearchTracksViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchTracksViewController.m; sourceTree = "<group>"; };
-		D5E5B5AA1D94624E00809B71 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = "../../../Downloads/1784669-de4e1b30f4d08cb759dac19619d3d5ba1f35bc96/README.md"; sourceTree = "<group>"; };
+		D5E5B5AC1D9462C000809B71 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		D5F56EB81D8F6064003DF0B3 /* PlayListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayListViewController.h; sourceTree = "<group>"; };
 		D5F56EB91D8F6064003DF0B3 /* PlayListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayListViewController.m; sourceTree = "<group>"; };
 		D5F56EBB1D8F6164003DF0B3 /* PlayListViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayListViewCell.h; sourceTree = "<group>"; };
@@ -80,7 +80,7 @@
 		D506DD551D8DAB0F000B0E61 = {
 			isa = PBXGroup;
 			children = (
-				D5E5B5AA1D94624E00809B71 /* README.md */,
+				D5E5B5AC1D9462C000809B71 /* README.md */,
 				D506DD601D8DAB0F000B0E61 /* SoundCloudPLM */,
 				D506DD5F1D8DAB0F000B0E61 /* Products */,
 			);
@@ -243,7 +243,7 @@
 				D55528F91D8E2963006A7B59 /* Playlist.m in Sources */,
 				D59D781F1D8EF39F00C1E3BC /* PlayListsViewCell.m in Sources */,
 				D506DD691D8DAB0F000B0E61 /* ViewController.m in Sources */,
-				D5E5B5AB1D94624E00809B71 /* README.md in Sources */,
+				D5E5B5AD1D9462C000809B71 /* README.md in Sources */,
 				D59D781C1D8EE27100C1E3BC /* Track.m in Sources */,
 				D59FC3A11D90748E00D827D9 /* TrackDetailsViewController.m in Sources */,
 				D506DD661D8DAB0F000B0E61 /* AppDelegate.m in Sources */,
