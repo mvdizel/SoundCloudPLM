@@ -50,7 +50,7 @@
                                 NSError *error) {
                 NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
                 [pl parseWithDict:json];
-                [self.delegate dataUpdated];
+                [self.delegate dataUpdateSuccess:YES];
             }] resume];
 }
 
@@ -89,36 +89,25 @@
 {
     NSString *plURL = @"https://api.soundcloud.com/playlists";
     if (pl.playId) {
-        plURL = [pl.uri absoluteString];
+        plURL = [@"https://api.soundcloud.com/me/playlists/" stringByAppendingString:pl.playId.stringValue];
     }
     NSURL *url = [NSURL URLWithString:plURL];
     NSURLComponents *comp = [NSURLComponents componentsWithURL:url
                                        resolvingAgainstBaseURL:YES];
-
+    
     NSMutableArray *qi = [[NSMutableArray alloc] init];
     [qi addObject:[NSURLQueryItem queryItemWithName:@"oauth_token" value:self.authResult.value]];
+    for (Track *track in pl.tracks) {
+        [qi addObject:[NSURLQueryItem queryItemWithName:@"playlist[tracks][][id]" value:[track.playId stringValue]]];
+    }
+    if (!pl.playId) {
+        [qi addObject:[NSURLQueryItem queryItemWithName:@"playlist[title]" value:pl.title]];
+        [qi addObject:[NSURLQueryItem queryItemWithName:@"playlist[sharing]" value:@"public"]];
+    }
     comp.queryItems = qi;
 
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:comp.URL];
-    request.HTTPMethod = @"POST";
-    
-    NSMutableDictionary *newPL = [NSMutableDictionary new];
-    [newPL setValue:pl.title forKey:@"title"];
-    [newPL setValue:@"sharing" forKey:@"sharing"];
-    NSMutableArray *tracks = [NSMutableArray new];
-    for (Track *track in pl.tracks) {
-        [tracks addObject:@{@"id":[track.playId stringValue]}];
-    }
-    [newPL setValue:tracks forKey:@"tracks"];
-    
-    NSDictionary *jsonDict = @{@"playlist":newPL};
-    
-    NSError *jsonError;
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:jsonDict
-                                                       options:NSJSONWritingPrettyPrinted
-                                                         error:&jsonError];
-    
-    [request setHTTPBody:jsonData];
+    request.HTTPMethod = (pl.playId) ? @"PUT" : @"POST";
     
     return request;
 }
@@ -133,7 +122,7 @@
                                 NSError *error) {
                 NSMutableArray *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
                 [self updatePlaylistsFromJSON:json];
-                [self.delegate dataUpdated];
+                [self.delegate dataUpdateSuccess:YES];
             }] resume];
 }
 
@@ -150,7 +139,9 @@
                 completionHandler:^(NSData *data,
                                     NSURLResponse *response,
                                     NSError *error) {
-                    [self.delegate dataUpdated];
+                    NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
+                    BOOL success = [httpResponse statusCode] == 201 || [httpResponse statusCode] == 200;
+                    [self.delegate dataUpdateSuccess:success];
                 }] resume];
 }
 
@@ -169,7 +160,7 @@
 {
     [_findedTracks removeAllObjects];
     _searchText = @"";
-    [self.delegate dataUpdated];
+    [self.delegate dataUpdateSuccess:YES];
 }
 
 -(NSURLRequest *)makeSearchRequestWithQuery:(NSString *)query
@@ -202,7 +193,7 @@
                 for (NSDictionary *dict in json) {
                     [_findedTracks addObject:[[Track alloc] initWithDict:dict]];
                 }
-                [self.delegate dataUpdated];
+                [self.delegate dataUpdateSuccess:YES];
             }] resume];
 }
 

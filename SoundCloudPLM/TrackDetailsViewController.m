@@ -27,7 +27,9 @@
 
 -(void)setup
 {
+    self.titleLabel.numberOfLines = 0;
     self.titleLabel.text = self.track.title;
+    [self.titleLabel sizeToFit];
     self.artistLabel.text = self.track.artist;
     
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);

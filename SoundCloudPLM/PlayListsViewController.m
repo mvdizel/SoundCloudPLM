@@ -21,10 +21,12 @@ static NSString * const reuseIdentifier = @"CellPL";
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.networkong = [SCNetworking sharedInstance];
+    self.networkong.delegate = self;
 }
 
 -(void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
     self.networkong.delegate = self;
     [self setup];
 }
@@ -120,7 +122,7 @@ static NSString * const reuseIdentifier = @"CellPL";
 
 #pragma mark - SC Networking delegate
 
--(void)dataUpdated
+-(void)dataUpdateSuccess:(BOOL)success
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.collectionView reloadData];

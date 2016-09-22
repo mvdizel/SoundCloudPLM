@@ -19,10 +19,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.networkong = [SCNetworking sharedInstance];
+    self.networkong.delegate = self;
 }
 
 -(void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
     self.networkong.delegate = self;
     if (self.networkong.searchText && self.networkong.searchText.length > 0) {
         self.searchBar.text = self.networkong.searchText;
@@ -82,7 +84,7 @@
     [self.networkong searchTracksWithQuery:searchText];
 }
 
--(void)dataUpdated
+-(void)dataUpdateSuccess:(BOOL)success
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.tableView reloadData];
