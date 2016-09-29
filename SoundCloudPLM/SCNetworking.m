@@ -13,6 +13,8 @@
 @property (strong, nonatomic, readwrite) NSMutableArray *playlists;
 @property (strong, nonatomic, readwrite) Playlist *tempPlaylist;
 @property (strong, nonatomic, readwrite) NSMutableArray *findedTracks;
+@property (strong, nonatomic) RKObjectManager *manager;
+@property (weak, nonatomic, readonly) NSDictionary *authParam;
 @end
 
 @implementation SCNetworking
@@ -34,124 +36,55 @@
         _state = [[OAuthState alloc] init];
         _playlists = [[NSMutableArray alloc] init];
         _findedTracks = [[NSMutableArray alloc] init];
+        [self initRKNetwork];
     }
     return self;
 }
 
 #pragma mark - Playlists API
 
--(void)updateTracksForPL:(Playlist *)pl
-{
-    NSURLRequest *request = [self makePlaylistsRequestWithId:pl.playId];
-    NSURLSession *session = [NSURLSession sharedSession];
-    [[session dataTaskWithURL:request.URL
-            completionHandler:^(NSData *data,
-                                NSURLResponse *response,
-                                NSError *error) {
-                NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-                [pl parseWithDict:json];
-                [self.delegate dataUpdateSuccess:YES];
-            }] resume];
-}
-
--(NSURLRequest *)makePlaylistsRequestWithId:(NSNumber *)id
-{
-    NSString *urlStr = [NSString stringWithFormat:@"https://api.soundcloud.com/me/playlists/%@",id];
-    NSURL *url = [NSURL URLWithString:urlStr];
-    NSURLComponents *comp = [NSURLComponents componentsWithURL:url
-                                       resolvingAgainstBaseURL:YES];
-    
-    NSMutableArray *qi = [[NSMutableArray alloc] init];
-    [qi addObject:[NSURLQueryItem queryItemWithName:@"oauth_token" value:self.authResult.value]];
-    comp.queryItems = qi;
-    
-    NSURLRequest *request = [NSURLRequest requestWithURL:comp.URL];
-    
-    return request;
-}
-
--(NSURLRequest *)makePlaylistsRequest
-{
-    NSURL *url = [NSURL URLWithString:@"https://api.soundcloud.com/me/playlists"];
-    NSURLComponents *comp = [NSURLComponents componentsWithURL:url
-                                       resolvingAgainstBaseURL:YES];
-    
-    NSMutableArray *qi = [[NSMutableArray alloc] init];
-    [qi addObject:[NSURLQueryItem queryItemWithName:@"oauth_token" value:self.authResult.value]];
-    comp.queryItems = qi;
-    
-    NSURLRequest *request = [NSURLRequest requestWithURL:comp.URL];
-    
-    return request;
-}
-
--(NSURLRequest *)makeSavePlaylistsRequest:(Playlist *)pl
-{
-    NSString *plURL = @"https://api.soundcloud.com/playlists";
-    if (pl.playId) {
-        plURL = [@"https://api.soundcloud.com/me/playlists/" stringByAppendingString:pl.playId.stringValue];
-    }
-    NSURL *url = [NSURL URLWithString:plURL];
-    NSURLComponents *comp = [NSURLComponents componentsWithURL:url
-                                       resolvingAgainstBaseURL:YES];
-    
-    NSMutableArray *qi = [[NSMutableArray alloc] init];
-    [qi addObject:[NSURLQueryItem queryItemWithName:@"oauth_token" value:self.authResult.value]];
-    for (Track *track in pl.tracks) {
-        [qi addObject:[NSURLQueryItem queryItemWithName:@"playlist[tracks][][id]" value:[track.playId stringValue]]];
-    }
-    if (!pl.playId) {
-        [qi addObject:[NSURLQueryItem queryItemWithName:@"playlist[title]" value:pl.title]];
-        [qi addObject:[NSURLQueryItem queryItemWithName:@"playlist[sharing]" value:@"public"]];
-    }
-    comp.queryItems = qi;
-
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:comp.URL];
-    request.HTTPMethod = (pl.playId) ? @"PUT" : @"POST";
-    
-    return request;
-}
-
 -(void)getPlaylists
 {
-    NSURLRequest *request = [self makePlaylistsRequest];
-    NSURLSession *session = [NSURLSession sharedSession];
-    [[session dataTaskWithURL:request.URL
-            completionHandler:^(NSData *data,
-                                NSURLResponse *response,
-                                NSError *error) {
-                NSMutableArray *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-                [self updatePlaylistsFromJSON:json];
-                [self.delegate dataUpdateSuccess:YES];
-            }] resume];
+    [self.manager getObjectsAtPath:@"/me/playlists"
+                        parameters:self.authParam
+                           success:
+    ^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+        [_playlists removeAllObjects];
+        [_playlists addObjectsFromArray:mappingResult.array];
+        [self.delegate dataUpdateSuccess:YES];
+    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        [self.delegate dataUpdateSuccess:NO];
+    }];
+}
+
+-(void)savePlaylist:(Playlist *)pl
+{
+    if (pl.playId) {
+        [self.manager putObject:pl
+                             path:[NSString stringWithFormat:@"/me/playlists/%@",pl.playId]
+                       parameters:self.authParam
+                          success:
+         ^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+             [self.delegate dataUpdateSuccess:YES];
+         } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+             [self.delegate dataUpdateSuccess:NO];
+         }];
+    } else {
+        [self.manager postObject:pl
+                            path:@"/playlists"
+                      parameters:self.authParam
+                         success:
+         ^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+             [self.delegate dataUpdateSuccess:YES];
+         } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+             [self.delegate dataUpdateSuccess:NO];
+         }];
+    }
 }
 
 -(void)createPlaylistNamed:(NSString *)name
 {
     self.tempPlaylist = [[Playlist alloc] initTemporaryNamed:name];
-}
-
--(void)savePlaylist:(Playlist *)pl
-{
-    NSURLRequest *request = [self makeSavePlaylistsRequest:pl];
-    NSURLSession *session = [NSURLSession sharedSession];
-    [[session dataTaskWithRequest:request
-                completionHandler:^(NSData *data,
-                                    NSURLResponse *response,
-                                    NSError *error) {
-                    NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
-                    BOOL success = [httpResponse statusCode] == 201 || [httpResponse statusCode] == 200;
-                    [self.delegate dataUpdateSuccess:success];
-                }] resume];
-}
-
--(void)updatePlaylistsFromJSON:(NSArray *)json
-{
-    [_playlists removeAllObjects];
-    for (int i = 0; i < json.count; i++) {
-        Playlist *pl = [[Playlist alloc] initWithDict:json[i]];
-        [_playlists addObject:pl];
-    }
 }
 
 #pragma mark - Tracks
@@ -163,38 +96,20 @@
     [self.delegate dataUpdateSuccess:YES];
 }
 
--(NSURLRequest *)makeSearchRequestWithQuery:(NSString *)query
-{
-    NSURL *url = [NSURL URLWithString:@"https://api.soundcloud.com/tracks"];
-    NSURLComponents *comp = [NSURLComponents componentsWithURL:url
-                                       resolvingAgainstBaseURL:YES];
-    
-    NSMutableArray *qi = [[NSMutableArray alloc] init];
-    [qi addObject:[NSURLQueryItem queryItemWithName:@"oauth_token" value:self.authResult.value]];
-    [qi addObject:[NSURLQueryItem queryItemWithName:@"q" value:query]];
-    comp.queryItems = qi;
-    
-    NSURLRequest *request = [NSURLRequest requestWithURL:comp.URL];
-    
-    return request;
-}
-
 -(void)searchTracksWithQuery:(NSString *)query
 {
-    _searchText = query;
-    NSURLRequest *request = [self makeSearchRequestWithQuery:query];
-    NSURLSession *session = [NSURLSession sharedSession];
-    [[session dataTaskWithURL:request.URL
-            completionHandler:^(NSData *data,
-                                NSURLResponse *response,
-                                NSError *error) {
-                NSMutableArray *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-                [_findedTracks removeAllObjects];
-                for (NSDictionary *dict in json) {
-                    [_findedTracks addObject:[[Track alloc] initWithDict:dict]];
-                }
-                [self.delegate dataUpdateSuccess:YES];
-            }] resume];
+    NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary:self.authParam];
+    [param setObject:query forKey:@"q"];
+    [self.manager getObjectsAtPath:@"/tracks"
+                        parameters:param
+                           success:
+     ^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+         [_findedTracks removeAllObjects];
+         [_findedTracks addObjectsFromArray:mappingResult.array];
+         [self.delegate dataUpdateSuccess:YES];
+     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+         [self.delegate dataUpdateSuccess:NO];
+     }];
 }
 
 #pragma mark - Authentication
@@ -213,7 +128,7 @@
     comp.queryItems = qi;
     
     NSURLRequest *request = [NSURLRequest requestWithURL:comp.URL];
-    
+
     return request;
 }
 
@@ -232,6 +147,11 @@
         self.authResult = [self retrieveCode:url];
     }
     return self.authResult;
+}
+
+-(NSDictionary *)authParam
+{
+    return @{ @"oauth_token" : self.authResult.value };
 }
 
 #pragma mark - Private
@@ -281,6 +201,83 @@
         }
     }
     return nil;
+}
+
+#pragma mark - RestKit Setup
+
+-(void)initRKNetwork
+{
+    NSURL *url = [NSURL URLWithString:@"https://api.soundcloud.com"];
+    self.manager = [RKObjectManager managerWithBaseURL:url];
+    [self setResponseDescriptors];
+    [self setRequestDescriptors];
+}
+
+-(void)setResponseDescriptors
+{
+    RKObjectMapping *trMapping = [RKObjectMapping mappingForClass:[Track class]];
+    NSDictionary *trMap = @{
+                            @"id": @"playId",
+                            @"title": @"title",
+                            @"artwork_url": @"image",
+                            };
+    [trMapping addAttributeMappingsFromDictionary:trMap];
+    
+    RKObjectMapping *plMapping = [RKObjectMapping mappingForClass:[Playlist class]];
+    NSDictionary *plMap = @{
+                            @"id": @"playId",
+                            @"title": @"title",
+                            @"artwork_url": @"image",
+                            @"uri": @"uri",
+                            };
+    [plMapping addAttributeMappingsFromDictionary:plMap];
+    [plMapping addRelationshipMappingWithSourceKeyPath:@"tracks" mapping:trMapping];
+    
+    NSIndexSet *successCodes = RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful);
+    
+    RKResponseDescriptor *rd = [RKResponseDescriptor
+                                responseDescriptorWithMapping:plMapping
+                                method:RKRequestMethodAny
+                                pathPattern:nil //@"/me/playlists"
+                                keyPath:nil
+                                statusCodes:successCodes];
+    
+    [self.manager addResponseDescriptor:rd];
+    
+    RKResponseDescriptor *trd = [RKResponseDescriptor
+                                 responseDescriptorWithMapping:trMapping
+                                 method:RKRequestMethodGET
+                                 pathPattern:@"/tracks"
+                                 keyPath:nil
+                                 statusCodes:successCodes];
+    
+    [self.manager addResponseDescriptor:trd];
+}
+
+-(void)setRequestDescriptors
+{
+    RKObjectMapping *trMapping = [RKObjectMapping requestMapping];
+    NSDictionary *trMap = @{
+                            @"playId": @"id",
+                            };
+    [trMapping addAttributeMappingsFromDictionary:trMap];
+    
+    RKObjectMapping *plMapping = [RKObjectMapping requestMapping];
+    NSDictionary *plMap = @{
+                            @"playId": @"id",
+                            @"sharing": @"sharing",
+                            @"title": @"title",
+                            };
+    [plMapping addAttributeMappingsFromDictionary:plMap];
+    [plMapping addRelationshipMappingWithSourceKeyPath:@"tracks" mapping:trMapping];
+    
+    RKRequestDescriptor *rd = [RKRequestDescriptor
+                               requestDescriptorWithMapping:plMapping
+                               objectClass:[Playlist class]
+                               rootKeyPath:@"playlist"
+                               method:RKRequestMethodAny];
+    
+    [self.manager addRequestDescriptor:rd];
 }
 
 @end

@@ -17,8 +17,10 @@
 -(instancetype)initWithDict:(NSDictionary *)dict
 {
     self = [super init];
-    _tracks = [[NSMutableArray alloc] init];
-    [self parseWithDict:dict];
+    if (self) {
+        _tracks = [[NSMutableArray alloc] init];
+        [self parseWithDict:dict];
+    }
     return self;
 }
 
@@ -26,8 +28,7 @@
 {
     self = [super init];
     _tracks = [[NSMutableArray alloc] init];
-    NSDictionary *dict = @{@"title":name};
-    [self parseWithDict:dict];
+    _title = name;
     return self;
 }
 
@@ -35,7 +36,7 @@
 {
     _playId = [dict valueForKey:@"id"];
     _title = [NSString stringWithString:[dict valueForKey:@"title"]];
-    _image = [self urlForJSONValue:[dict valueForKey:@"artwork_url"]];
+    self.image = [self urlForJSONValue:[dict valueForKey:@"artwork_url"]];
     _uri = [self urlForJSONValue:[dict valueForKey:@"uri"]];
     
     [_tracks removeAllObjects];
@@ -44,14 +45,7 @@
     }
     
     if (!_image && _tracks.count != 0) {
-        _image = [_tracks.firstObject valueForKey:@"image"];
-    }
-    if (_image) {
-        NSString *u500 = [_image.absoluteString stringByReplacingOccurrencesOfString:@"large.jpg"
-                                                                          withString:@"t500x500.jpg"];
-        _image500 = [NSURL URLWithString:u500];
-    } else {
-        _image500 = nil;
+        self.image = [_tracks.firstObject valueForKey:@"image"];
     }
 }
 
@@ -65,7 +59,34 @@
     [_tracks removeObjectAtIndex:index];
 }
 
-#pragma mark - Private JSON parsing
+-(NSString *)sharing
+{
+    return @"public";
+}
+
+#pragma mark - Private
+
+-(void)setTracks:(NSMutableArray *)tracks
+{
+    _tracks = tracks;
+    if (!_image && _tracks.count != 0) {
+        self.image = [_tracks.firstObject valueForKey:@"image"];
+    }
+}
+
+-(void)setImage:(NSURL *)image
+{
+    _image = image;
+    if (_image) {
+        NSString *u500 = [_image.absoluteString stringByReplacingOccurrencesOfString:@"large.jpg"
+                                                                          withString:@"t500x500.jpg"];
+        _image500 = [NSURL URLWithString:u500];
+    } else {
+        _image500 = nil;
+    }
+}
+
+#pragma mark - JSON parsing
 
 -(NSURL *)urlForJSONValue:(id)value
 {

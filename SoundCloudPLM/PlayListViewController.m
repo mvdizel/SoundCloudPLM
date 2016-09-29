@@ -86,9 +86,7 @@
     PlayListViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TrackCell" forIndexPath:indexPath];
     
     Track *tr = self.playlist.tracks[indexPath.row];
-    cell.titleLabel.text = tr.title;
-    cell.artistLabel.text = tr.artist;
-    [cell updateImageWithUrl:tr.image andTrack:tr];
+    [cell setupCellWithTrack:tr];
     
     return cell;
 }

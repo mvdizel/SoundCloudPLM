@@ -12,6 +12,7 @@
 @interface SearchTracksViewController () <UITableViewDelegate, UISearchBarDelegate, SCNetworkingDelegate>
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (strong, nonatomic) SCNetworking *networkong;
+@property (strong, nonatomic) UIActivityIndicatorView *spinner;
 @end
 
 @implementation SearchTracksViewController 
@@ -20,6 +21,13 @@
     [super viewDidLoad];
     self.networkong = [SCNetworking sharedInstance];
     self.networkong.delegate = self;
+    self.view.backgroundColor = [UIColor whiteColor];
+    self.spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    self.spinner.color = [UIColor lightGrayColor];
+    self.spinner.frame = CGRectMake(0.0, 0.0, 10.0, 10.0);
+    self.spinner.center = self.view.center;
+    [self.view addSubview:self.spinner];
+    [self.spinner bringSubviewToFront:self.view];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -51,9 +59,7 @@
     PlayListViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TrackCell" forIndexPath:indexPath];
     
     Track *tr = self.networkong.findedTracks[indexPath.row];
-    cell.titleLabel.text = tr.title;
-    cell.artistLabel.text = tr.artist;
-    [cell updateImageWithUrl:tr.image andTrack:tr];
+    [cell setupCellWithTrack:tr];
     
     return cell;
 }
@@ -68,7 +74,7 @@
 
 -(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
-    [self.networkong searchTracksWithQuery:searchBar.text];
+    [self searchTracksWithQuery:searchBar.text];
     [self dismissKeyboard];
 }
 
@@ -81,14 +87,21 @@
 
 -(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
-    [self.networkong searchTracksWithQuery:searchText];
+    [self searchTracksWithQuery:searchText];
 }
 
 -(void)dataUpdateSuccess:(BOOL)success
 {
     dispatch_async(dispatch_get_main_queue(), ^{
+        [self.spinner stopAnimating];
         [self.tableView reloadData];
     });
+}
+
+-(void)searchTracksWithQuery:(NSString *)query
+{
+    [self.spinner startAnimating];
+    [self.networkong searchTracksWithQuery:query];
 }
 
 @end
