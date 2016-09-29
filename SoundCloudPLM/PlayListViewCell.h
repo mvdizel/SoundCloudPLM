@@ -13,6 +13,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *artistLabel;
 
--(void)updateImageWithUrl:(NSURL *)url andTrack:(Track *)track;
+-(void)setupCellWithTrack:(Track *)track;
 
 @end

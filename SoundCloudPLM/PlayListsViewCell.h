@@ -15,6 +15,6 @@
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *spinner;
 
--(void)updateImageWithUrl:(NSURL *)url andPlaylist:(Playlist *)pl;
+-(void)setupCellWithPlaylist:(Playlist *)pl;
 
 @end

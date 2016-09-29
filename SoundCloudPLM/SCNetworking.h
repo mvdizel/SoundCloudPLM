@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <RestKit/RestKit.h>
 #import "OAuthState.h"
 #import "AuthResult.h"
 #import "Playlist.h"
@@ -32,7 +33,6 @@
 -(BOOL)isOAuthResponse:(NSURL *)url;
 -(void)createPlaylistNamed:(NSString *)name;
 -(void)savePlaylist:(Playlist *)pl;
--(void)updateTracksForPL:(Playlist *)pl;
 -(void)searchTracksWithQuery:(NSString *)query;
 -(void)clearSearchResults;
 

@@ -10,20 +10,15 @@
 
 @implementation PlayListViewCell
 
-- (void)awakeFromNib {
-    [super awakeFromNib];
-}
-
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-    [super setSelected:selected animated:animated];
-}
-
--(void)updateImageWithUrl:(NSURL *)url andTrack:(Track *)track
+-(void)setupCellWithTrack:(Track *)track
 {
+    self.titleLabel.text = track.title;
+    self.artistLabel.text = track.artist;
+    [self.imageView setImage:nil];
     if (!track.downloadedImage) {
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
         dispatch_async(queue, ^{
-            NSData *imageData = [NSData dataWithContentsOfURL:url];
+            NSData *imageData = [NSData dataWithContentsOfURL:track.image];
             track.downloadedImage = imageData;
             dispatch_sync(dispatch_get_main_queue(), ^{
                 [self setTrackImage:imageData];

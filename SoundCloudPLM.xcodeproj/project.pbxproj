@@ -13,6 +13,7 @@
 		D506DD6C1D8DAB0F000B0E61 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D506DD6A1D8DAB0F000B0E61 /* Main.storyboard */; };
 		D506DD6E1D8DAB0F000B0E61 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D506DD6D1D8DAB0F000B0E61 /* Assets.xcassets */; };
 		D506DD711D8DAB0F000B0E61 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D506DD6F1D8DAB0F000B0E61 /* LaunchScreen.storyboard */; };
+		D53DC15CB7A7B843908B8DD8 /* libPods-SoundCloudPLM.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 666FB2FE43A01421302AA4C5 /* libPods-SoundCloudPLM.a */; };
 		D55528E71D8DC455006A7B59 /* SCNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = D55528E61D8DC455006A7B59 /* SCNetworking.m */; };
 		D55528EA1D8DCAAA006A7B59 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D55528E91D8DCAAA006A7B59 /* LoginViewController.m */; };
 		D55528ED1D8DCD2E006A7B59 /* OAuthState.m in Sources */ = {isa = PBXBuildFile; fileRef = D55528EC1D8DCD2E006A7B59 /* OAuthState.m */; };
@@ -29,6 +30,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4168104F6E07A79CD779E425 /* Pods-SoundCloudPLM.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SoundCloudPLM.release.xcconfig"; path = "Pods/Target Support Files/Pods-SoundCloudPLM/Pods-SoundCloudPLM.release.xcconfig"; sourceTree = "<group>"; };
+		666FB2FE43A01421302AA4C5 /* libPods-SoundCloudPLM.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SoundCloudPLM.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D4C5ACBC046B15BD0E1467E4 /* Pods-SoundCloudPLM.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SoundCloudPLM.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SoundCloudPLM/Pods-SoundCloudPLM.debug.xcconfig"; sourceTree = "<group>"; };
 		D506DD5E1D8DAB0F000B0E61 /* SoundCloudPLM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SoundCloudPLM.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D506DD621D8DAB0F000B0E61 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		D506DD641D8DAB0F000B0E61 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -71,18 +75,38 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D53DC15CB7A7B843908B8DD8 /* libPods-SoundCloudPLM.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5DF29D119F5A084E36A3B9EF /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				D4C5ACBC046B15BD0E1467E4 /* Pods-SoundCloudPLM.debug.xcconfig */,
+				4168104F6E07A79CD779E425 /* Pods-SoundCloudPLM.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		AC2741DAEB90FEEF87C617B2 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				666FB2FE43A01421302AA4C5 /* libPods-SoundCloudPLM.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		D506DD551D8DAB0F000B0E61 = {
 			isa = PBXGroup;
 			children = (
 				D5E5B5AC1D9462C000809B71 /* README.md */,
 				D506DD601D8DAB0F000B0E61 /* SoundCloudPLM */,
 				D506DD5F1D8DAB0F000B0E61 /* Products */,
+				5DF29D119F5A084E36A3B9EF /* Pods */,
+				AC2741DAEB90FEEF87C617B2 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -173,9 +197,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D506DD751D8DAB0F000B0E61 /* Build configuration list for PBXNativeTarget "SoundCloudPLM" */;
 			buildPhases = (
+				77373C6C31CD7B526DF66644 /* [CP] Check Pods Manifest.lock */,
 				D506DD5A1D8DAB0F000B0E61 /* Sources */,
 				D506DD5B1D8DAB0F000B0E61 /* Frameworks */,
 				D506DD5C1D8DAB0F000B0E61 /* Resources */,
+				B031D998A501F7AE4E1DF677 /* [CP] Embed Pods Frameworks */,
+				AAA7873BF8069806DC9F8805 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -231,6 +258,54 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		77373C6C31CD7B526DF66644 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		AAA7873BF8069806DC9F8805 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SoundCloudPLM/Pods-SoundCloudPLM-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B031D998A501F7AE4E1DF677 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SoundCloudPLM/Pods-SoundCloudPLM-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		D506DD5A1D8DAB0F000B0E61 /* Sources */ = {
@@ -362,9 +437,20 @@
 		};
 		D506DD761D8DAB0F000B0E61 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D4C5ACBC046B15BD0E1467E4 /* Pods-SoundCloudPLM.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)/**",
+					"\"${PODS_ROOT}/Headers/Public/AFNetworking\"/**",
+					"\"${PODS_ROOT}/Headers/Public/ISO8601DateFormatterValueTransformer\"/**",
+					"\"${PODS_ROOT}/Headers/Public/RKValueTransformers\"/**",
+					"\"${PODS_ROOT}/Headers/Public/RestKit\"/**",
+					"\"${PODS_ROOT}/Headers/Public/SOCKit\"/**",
+					"\"${PODS_ROOT}/Headers/Public/TransitionKit\"/**",
+					"\"${PODS_ROOT}/Headers/Public\"/**",
+				);
 				INFOPLIST_FILE = SoundCloudPLM/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = VasiliiMuravev.SoundCloudPLM;
@@ -374,9 +460,20 @@
 		};
 		D506DD771D8DAB0F000B0E61 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4168104F6E07A79CD779E425 /* Pods-SoundCloudPLM.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)/**",
+					"\"${PODS_ROOT}/Headers/Public/AFNetworking\"/**",
+					"\"${PODS_ROOT}/Headers/Public/ISO8601DateFormatterValueTransformer\"/**",
+					"\"${PODS_ROOT}/Headers/Public/RKValueTransformers\"/**",
+					"\"${PODS_ROOT}/Headers/Public/RestKit\"/**",
+					"\"${PODS_ROOT}/Headers/Public/SOCKit\"/**",
+					"\"${PODS_ROOT}/Headers/Public/TransitionKit\"/**",
+					"\"${PODS_ROOT}/Headers/Public\"/**",
+				);
 				INFOPLIST_FILE = SoundCloudPLM/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = VasiliiMuravev.SoundCloudPLM;

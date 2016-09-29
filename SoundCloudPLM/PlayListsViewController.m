@@ -12,6 +12,7 @@
 
 @interface PlayListsViewController () <SCNetworkingDelegate>
 @property (strong, nonatomic) SCNetworking *networkong;
+@property (strong, nonatomic) UIActivityIndicatorView *spinner;
 @end
 
 @implementation PlayListsViewController
@@ -22,6 +23,13 @@ static NSString * const reuseIdentifier = @"CellPL";
     [super viewDidLoad];
     self.networkong = [SCNetworking sharedInstance];
     self.networkong.delegate = self;
+    self.view.backgroundColor = [UIColor whiteColor];
+    self.spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    self.spinner.color = [UIColor lightGrayColor];
+    self.spinner.frame = CGRectMake(0.0, 0.0, 10.0, 10.0);
+    self.spinner.center = self.view.center;
+    [self.view addSubview:self.spinner];
+    [self.spinner bringSubviewToFront:self.view];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -57,6 +65,9 @@ static NSString * const reuseIdentifier = @"CellPL";
 
 -(void)updateData
 {
+    [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
+    self.collectionView.alpha = 0;
+    [self.spinner startAnimating];
     self.networkong.delegate = self;
     [self.networkong getPlaylists];
 }
@@ -82,11 +93,8 @@ static NSString * const reuseIdentifier = @"CellPL";
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     PlayListsViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
     
-    // Configure the cell
     Playlist *pl = self.networkong.playlists[indexPath.row];
-    
-    cell.titleLabel.text = pl.title;
-    [cell updateImageWithUrl:pl.image andPlaylist:pl];
+    [cell setupCellWithPlaylist:pl];
     
     return cell;
 }
@@ -94,7 +102,7 @@ static NSString * const reuseIdentifier = @"CellPL";
 - (IBAction)addNewPLTapped:(UIBarButtonItem *)sender {
     
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Creating new playlist"
-                                                                   message:@"You will need to to add some tracks to save playlist"
+                                                                   message:nil
                                                             preferredStyle:UIAlertControllerStyleAlert];
     
     [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
@@ -126,6 +134,9 @@ static NSString * const reuseIdentifier = @"CellPL";
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.collectionView reloadData];
+        [self.spinner stopAnimating];
+        self.collectionView.alpha = 1;
+        [[UIApplication sharedApplication] endIgnoringInteractionEvents];
     });
 }
 
